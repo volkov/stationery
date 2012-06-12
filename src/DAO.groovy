@@ -29,6 +29,7 @@ class DAO {
   def parse(string) {
     return JSON.parse(string)
   }
+  
 
   def fillContent(f){
     db.item.find().each{
@@ -107,7 +108,7 @@ class DAO {
     }
     day++
   }
-
+  
   def applyDelivery(delivery,day){
     delivery.items.each{
       def from = db.content.findOne(store:delivery.from,item:it.item,day:day)

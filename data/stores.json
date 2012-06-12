@@ -1,2 +1,2 @@
-{"name":"lenta","type":"store","v":100}
-{"name":"warehouse","type":"warehouse","v":10000}
+{"name":"lenta","type":"store","v":100,"k":200,"ro":1.0}
+{"name":"warehouse","type":"warehouse","v":10000,"k":1000,"ro":0.8}
