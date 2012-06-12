@@ -1,12 +1,25 @@
 @Grab(group='com.gmongo', module='gmongo', version='0.9.5')
 import com.gmongo.GMongo
+import com.mongodb.util.JSON
 
 class DAO {
 
 	def mongo = new GMongo()
 	def db = mongo.getDB("stationery")
 	def day = 0	
+	
+	def cleanDb(){
+		db.item.drop()
+		db.store.drop()
+		db.content.drop()
+		db.delivery.drop()
+		db.order.drop()
+	}
 
+	def parse(string) {
+		return JSON.parse(string)
+	}
+	
 	def fillDb(demand) {
 		db.item.drop()
 		db.item << [name:'Pen',profit:1.4d,v:0.9d]

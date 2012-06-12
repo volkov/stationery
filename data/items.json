@@ -1,0 +1,64 @@
+{"item":1,"name":"Набор карандашей ","unit":"шт","demand":80,"price":20}
+{"item":2,"name":"Клей силикатный ","unit":"шт","demand":8,"price":150}
+{"item":3,"name":"Клей карандаш brauder","unit":"шт","demand":15,"price":100}
+{"item":4,"name":"Клей ПВА","unit":"шт","demand":18,"price":80}
+{"item":5,"name":"Клей секундный Момент","unit":"шт","demand":25,"price":25}
+{"item":6,"name":"Клей секундный Монолитт","unit":"шт","demand":8,"price":10}
+{"item":7,"name":"Линейка Стамм","unit":"шт","demand":10,"price":50}
+{"item":8,"name":"Линейка Стамм","unit":"шт","demand":16,"price":30}
+{"item":9,"name":"Маркер-выделитель текста Schneider One","unit":"уп.","demand":140,"price":20}
+{"item":10,"name":"Набор узких клейких закладок Hopax","unit":"шт","demand":50,"price":34}
+{"item":11,"name":"Папка регистратор ","unit":"шт","demand":55,"price":50}
+{"item":12,"name":"Папка регистратор ","unit":"шт","demand":55,"price":50}
+{"item":13,"name":"Папка бумажная с завязками ","unit":"шт","demand":7,"price":200}
+{"item":14,"name":"Скоросшиватель Дело цветной","unit":"шт","demand":8,"price":100}
+{"item":15,"name":"Папка уголок ","unit":"шт","demand":3.8,"price":250}
+{"item":16,"name":"Скоросшиватель на 30 файлов","unit":"шт.","demand":8,"price":300}
+{"item":17,"name":"Скоросшиватель на 60 файлов","unit":"шт","demand":45,"price":59}
+{"item":18,"name":"Лоток для бумаг ","unit":"уп.","demand":400,"price":10}
+{"item":19,"name":"Вертикальный накопитель для бумаг","unit":"уп.","demand":250,"price":10}
+{"item":20,"name":"Ручка шариковая corvine 151","unit":"шт","demand":3,"price":500}
+{"item":21,"name":"Ручка шариковая ","unit":"шт","demand":4,"price":500}
+{"item":22,"name":"Ручка глеевая ","unit":"шт","demand":38,"price":50}
+{"item":23,"name":"Скобы для степлера №10","unit":"уп.","demand":6,"price":100}
+{"item":24,"name":"Скобы для степлера №24/6","unit":"уп.","demand":16,"price":100}
+{"item":25,"name":"Стержень шариковый Corvina","unit":"шт","demand":2,"price":500}
+{"item":26,"name":"Файл brauder ","unit":"уп.","demand":100,"price":20}
+{"item":27,"name":"Корректирующая жидкость brauder ","unit":"шт","demand":55,"price":50}
+{"item":28,"name":"Корректирующий роллер Koress ","unit":"шт","demand":6,"price":65}
+{"item":29,"name":"Корректирующий роллер beifa ","unit":"шт","demand":5,"price":12}
+{"item":30,"name":" CD RW диски Verbatim","unit":"уп.","demand":160,"price":22}
+{"item":31,"name":"Флеш память Kingston 2Gb","unit":"шт.","demand":350,"price":3}
+{"item":32,"name":"Обложка для учебника универсальный","unit":"шт","demand":9,"price":101}
+{"item":33,"name":"Нож универсальный brauder","unit":"кор","demand":540,"price":1}
+{"item":34,"name":"Степлер КW-Trio 50LB","unit":"шт","demand":1350,"price":2}
+{"item":35,"name":"Антистеплер KW-trio 508 В","unit":"шт","demand":21.5,"price":20}
+{"item":36,"name":"Блок - кубик запасной","unit":"шт","demand":40,"price":24}
+{"item":37,"name":"Бумага для заметок","unit":"шт","demand":14,"price":50}
+{"item":38,"name":"Папка с прижимом","unit":"шт","demand":20,"price":30}
+{"item":39,"name":"Скрепки цветные","unit":"шт","demand":11.5,"price":50}
+{"item":40,"name":"Скрепки ","unit":"шт","demand":5.5,"price":50}
+{"item":41,"name":"Скрепки большие","unit":"шт","demand":15,"price":50}
+{"item":42,"name":"Тетрадь 48 листов ","unit":"шт","demand":14,"price":200}
+{"item":43,"name":"Тетрадь 96 листов ","unit":"шт","demand":25,"price":200}
+{"item":44,"name":"Тетрадь 18 листов","unit":"шт","demand":3,"price":800}
+{"item":45,"name":"Штамп со стандартным словом КОПИЯ ВЕРНА подпись……","unit":"шт","demand":180,"price":1}
+{"item":46,"name":"Визитница ","unit":"шт","demand":250,"price":3}
+{"item":47,"name":"Ролики для факсов MEGA","unit":"шт.","demand":40,"price":30}
+{"item":48,"name":"Бумага копировальная ","unit":"уп.","demand":70,"price":29}
+{"item":49,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":50,"price":15}
+{"item":50,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":50,"price":15}
+{"item":51,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":50,"price":15}
+{"item":52,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":51,"price":15}
+{"item":53,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":54,"price":15}
+{"item":54,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":54,"price":20}
+{"item":55,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":55,"price":20}
+{"item":56,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":59,"price":20}
+{"item":57,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":59,"price":20}
+{"item":58,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":63,"price":30}
+{"item":59,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":67,"price":35}
+{"item":60,"name":"Расходный материал для переплетной системы","unit":"шт.","demand":70,"price":35}
+{"item":61,"name":"Бокс для CD MB -30SL","unit":"шт.","demand":650,"price":1}
+{"item":62,"name":"Портмоне для CD/DVD-дисков","unit":"шт.","demand":350,"price":1}
+{"item":63,"name":"Штемпельная краска Trodat 7011","unit":"шт.","demand":65,"price":8}
+{"item":64,"name":"Штемпельная краска Trodat 7011","unit":"шт.","demand":65,"price":2}
