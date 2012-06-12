@@ -18,6 +18,10 @@ stores.eachLine {
 }
 println "Generate content"
 dao.fillContent{ item, store ->
-	return [n:0,demand:item.demand]
+  if (store.type=="store"){
+    return [n:0,demand:item.demand]
+  } else {
+    return [n:100000,demand:0]
+  }
 }
 
