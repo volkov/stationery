@@ -1,4 +1,3 @@
-import groovy.json.JsonSlurper
 def dao = new DAO()
 
 println "Drop collections..."
@@ -17,3 +16,8 @@ stores.eachLine {
 	store = dao.parse(it)
 	dao.db.store<<store
 }
+println "Generate content"
+dao.fillContent{ item, store ->
+	return [n:0,demand:item.demand]
+}
+
