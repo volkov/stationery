@@ -16,12 +16,19 @@ stores.eachLine {
 	store = dao.parse(it)
 	dao.db.store<<store
 }
-println "Generate content"
-dao.fillContent{ item, store ->
-  if (store.type=="store"){
-    return [n:0,demand:item.demand]
-  } else {
-    return [n:100000,demand:0]
+println "Generate past demand from ${args[2]}"
+def demand = [] 
+new File(args[2]).eachLine{ demand << Float.parseFloat(it)}
+println demand
+dao.eachItemStore{ i,s->
+  ((1-demand.size())..0).each{
+    d = (Integer) (demand[-it]*i.demand).round()
+    dao.db.content<< [item:i._id,store:s._id,demand:d,n:d,day:it]
+  }
+}
+dao.eachItemWarehouse{ i,s->
+  ((1-demand.size())..0).each{
+    dao.db.content << [item:i._id,store:s._id,demand:0,n:100000,day:it]
   }
 }
 

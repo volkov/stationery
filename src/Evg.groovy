@@ -1,9 +1,35 @@
 
 class Evg {
-
-  def demand(item,store,day){
-    if (store.type != 'warehouse') return item.demand
-    return 0
+  
+  def alpha = 0.3f
+  
+  def demand(item,store,day,db){
+    return db.content.findOne(item:item._id,store:store._id,day:day-365).demand
+  }
+  
+  def sstat(i,s,t,db){
+    return db.content.findOne(item:i._id,store:s._id,day:t).demand
+  }
+  def sproj(i,s,day,T,db){
+    def sum=0;
+    def n=0;;
+    def f;
+    db.content.find(item:i._id,store:s._id).sort(day:1).each {
+      sum+=it.demand
+      n++
+      if ((day-it.day)%T==0) {
+        if (n==T){
+          if (f==null){
+            f=sum
+          } else {
+            f=alpha*sum+(1-alpha)*f
+          }
+        }
+        n=0
+        sum=0
+      }
+    }
+    return f
   }
 
   def run(db,day){
@@ -16,13 +42,16 @@ class Evg {
       println "----- store:${s.name} -----"
       def pu = [:]
       println "--- pu dump ---"
+      def sprojd=[:]
       items.each { i ->
-        def savgp = (day-365..day-365+6).inject(0) {a,b -> a + demand(i,s,b)} / 7.0
-        def savgi = (day+1..day+7).inject(0) {a,b -> a + demand(i,s,b)}/7.0
-        def savg = (day-6..day).inject(0) {a,b -> a + demand(i,s,b)}/7.0
-        def di = ((day-365..day-365+6).inject(0) {a,b -> (a + savg-demand(i,s,b)) ** 2}/7.0) ** 0.5
-        pu[i] = [savgp, savgi].max()+di
-        println "store:${s.name},item:${i.name},demand:${i.demand},day:${day},savgp:${savgp},savgi:${savgi},savg:${savg},di:${di},pu[i]:${pu[i]}"
+        def savgp = (day-364..day-364+7).inject(0) {a,b -> a + sstat(i,s,b,db)} / 7.0
+        def savg = (day-6..day).inject(0) {a,b -> a + sstat(i,s,b,db)}/7.0
+        def di = ((day-6..day).inject(0) {a,b -> a + (savg-sstat(i,s,b,db)) ** 2}/7.0) ** 0.5
+        sprojd[i] = sproj(i,s,day,1,db)
+        def sstatd = sstat(i,s,day,db)
+        def R = di * Math.signum(sprojd[i]-sstatd);
+        pu[i] = i.nu*(alpha*savgp+(1-alpha)*sprojd[i]+R)
+        println "${i.name},day:${day},savgp:${savgp},savg:${savg},sproj:${sprojd[i]},sstat:${sstatd},R:${R},di:${di},pu[i]:${pu[i]}"
       }
       def spuvi = items.inject(0) {a,item -> a+pu[item]*item.v}
       println "--- spuvi:${spuvi}"
@@ -41,8 +70,8 @@ class Evg {
       items.each { i ->
         n[i] = db.content.findOne(store:s._id,item:i._id,day:day).n
         def sum = 0
-        if (n[i]-demand(i,s,day+1)<=pu[i]){
-          sstar[i]=(1..t).inject(0) {a,b -> a+demand(i,s,day+b)}
+        if (n[i]-sprojd[i]<=pu[i]){
+          sstar[i]=sproj(i,s,day,t,db)
           itemsk<<i
           println "${i.name} sstar:${sstar[i]}"
         }
@@ -50,10 +79,10 @@ class Evg {
       if (itemsk.isEmpty()) return;
       def qdiv = 0;
       itemsk.each {
-        qdiv+=sstar[it]*it.ro*it.price*t/365
+        qdiv+=sstar[it]*it.ro*it.price*t
       }
       println "--- qdiv:${qdiv}---"
-      def qm = (s.k/qdiv)**0.5
+      def qm = (2*s.k*365/qdiv)**0.5
       println "--- qm:${qm}---"
       println "--- qstar dump---"
       def qstar = [:]
@@ -89,12 +118,12 @@ class Evg {
   }
 
   def getT(db,store) {
-    def deliveryDates = []
+    /*def deliveryDates = []
     db.deliveries.find(store:store._id).sort(day:-1).limit(2).each{ deliveryDates<<it.day}
     if (deliveryDates.size()>1){
       return deliveryDates[1]-deliveryDates[0]
-    }
-    return 7
+    }*/
+    return 30
   }
 
   def wrap(cursor){

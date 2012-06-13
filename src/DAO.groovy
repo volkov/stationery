@@ -22,6 +22,9 @@ class DAO {
     db.item.drop()
     db.store.drop()
     db.content.drop()
+    db.content.ensureIndex(item:1)
+    db.content.ensureIndex(store:1)
+    db.content.ensureIndex(day:1)
     db.delivery.drop()
     db.order.drop()
   }
@@ -30,7 +33,23 @@ class DAO {
     return JSON.parse(string)
   }
   
+  def eachItemStore(f){
+    db.item.find().each{ i ->
+      db.store.find(type:"store").each { s ->
+        f(i,s)
+      }
+    }
+  }
+  
+  def eachItemWarehouse(f){
+    db.item.find().each{ i ->
+      db.store.find(type:"warehouse").each { s ->
+        f(i,s)
+      }
+    }
+  }
 
+  
   def fillContent(f){
     db.item.find().each{
       i ->
@@ -46,38 +65,6 @@ class DAO {
     }
   }
 
-  def fillDb(demand) {
-    db.item.drop()
-    db.item << [name:'Pen',profit:1.4d,v:0.9d]
-    def pen = db.item.findOne(name:'Pen')
-    db.store.drop()
-    db.store << [name:'Lenta',type:'store']
-    def lenta = db.store.findOne(name : 'Lenta')
-    db.store << [name:'Warehouse',type:'warehouse']
-    def warehouse = db.store.findOne(name : 'Warehouse')
-    db.content.drop()
-    db.item.find().each{
-      i ->
-      db.store.find().each {
-        s ->
-        db.content<<[item:i._id,store:s._id,n:1,demand:demand(i,s,0),day:0]
-      }
-    }
-    db.delivery.drop()
-    db.delivery << [
-      items:[[item:pen._id,n:1]],
-      from:warehouse._id,
-      to:lenta._id,
-      day:0
-    ]
-    db.order.drop()
-    db.order << [
-      items:[[item:pen._id,n:1]],
-      to:warehouse._id,
-      day:0
-    ]
-  }
-
   def iterate(){
     ext.run(db,day)
     db.content.find(day : day).each {
@@ -88,7 +75,7 @@ class DAO {
         item:it.item,
         store:it.store,
         n:[it.n-it.demand,0].max(),
-        demand:ext.demand(item,store,day+1),
+        demand:ext.demand(item,store,day+1,db),
         day:day+1
       ]
     }
