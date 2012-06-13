@@ -25,6 +25,7 @@ class DAO {
     db.content.ensureIndex(item:1)
     db.content.ensureIndex(store:1)
     db.content.ensureIndex(day:1)
+    db.lorder.drop()
     db.delivery.drop()
     db.order.drop()
   }

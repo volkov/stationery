@@ -51,6 +51,7 @@ class Evg {
         def sstatd = sstat(i,s,day,db)
         def R = di * Math.signum(sprojd[i]-sstatd);
         pu[i] = i.nu*(alpha*savgp+(1-alpha)*sprojd[i]+R)
+        db.lorder<<[store:s._id,item:i._id,day:day,lorder:pu[i]]
         println "${i.name},day:${day},savgp:${savgp},savg:${savg},sproj:${sprojd[i]},sstat:${sstatd},R:${R},di:${di},pu[i]:${pu[i]}"
       }
       def spuvi = items.inject(0) {a,item -> a+pu[item]*item.v}
