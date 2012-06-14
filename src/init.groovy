@@ -18,7 +18,7 @@ stores.eachLine {
 }
 println "Generate past demand from ${args[2]}"
 def demand = [] 
-new File(args[2]).eachLine{ demand << Float.parseFloat(it)}
+new File(args[2]).eachLine{ demand << (Float.parseFloat(it)*Float.parseFloat(it)*Float.parseFloat(it))}
 println demand
 dao.eachItemStore{ i,s->
   ((1-demand.size())..0).each{
@@ -28,7 +28,7 @@ dao.eachItemStore{ i,s->
 }
 dao.eachItemWarehouse{ i,s->
   ((1-demand.size())..0).each{
-    dao.db.content << [item:i._id,store:s._id,demand:0,n:100000,day:it]
+    dao.db.content << [item:i._id,store:s._id,demand:0,n:i.demand*30*3,day:it]
   }
 }
 

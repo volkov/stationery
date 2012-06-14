@@ -87,7 +87,7 @@ class DAO {
         applyDelivery(delivery,day+1)
       }
     }
-    db.order.find(day : day-1).each {
+    db.order.find(day : day).each {
       order ->
       println order
       order.items.each{

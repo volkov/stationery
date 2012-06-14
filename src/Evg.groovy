@@ -10,6 +10,11 @@ class Evg {
   def sstat(i,s,t,db){
     return db.content.findOne(item:i._id,store:s._id,day:t).demand
   }
+  
+  def sstatw(i,t,db){
+    return db.store.find(type:"store").inject(0){a, s -> a + sstat(i,s,t,db)}
+  }
+  
   def sproj(i,s,day,T,db){
     def sum=0;
     def n=0;;
@@ -36,8 +41,10 @@ class Evg {
     println "------ day ${day} ------"
     def stores = wrap(db.store.find(type:"store"))
     def items = wrap(db.item.find())
+    def warehouse = db.store.findOne(type:"warehouse")
     items.each{println it}
-
+    
+    def t = getT(db)
     stores.each { s ->
       println "----- store:${s.name} -----"
       def pu = [:]
@@ -62,7 +69,7 @@ class Evg {
         nmax[i]=s.v/(spuvi*i.v)*pu[i]
         println "${i.name} nmax:${nmax[i]}"
       }
-      def t = getT(db,s)
+      
       println "--- t:${t} ---"
       def sstar = [:]
       println "--- sstar dump---"
@@ -112,18 +119,70 @@ class Evg {
           deliveryItems << [item:it._id,n:(Integer)qq[it].round()]
         }
         println deliveryItems
-        def warehouse = db.store.findOne(type:"warehouse")
+        
         db.delivery << [from:warehouse._id,to:s._id,items:deliveryItems,day:day]
       }
     }
+    println "-------warehouse-------"
+    def shouldOrder=false
+    items.each {i -> 
+      println "--- item ${i.name} ---"
+      println sstatw(i,day,db)
+      def pu = getPu(i,stores,day,t,db)
+      db.lorder << [store:warehouse._id,item:i._id,day:day,lorder:pu]
+      def lcur = db.content.findOne(store:warehouse._id,item:i._id,day:day).n
+      println "pu:${pu},lcur:${lcur}"
+      if (pu>lcur){
+        shouldOrder = true
+      }
+    }
+    if (shouldOrder){
+      println "!!!!shouldorder"
+      def itemsk = []
+      def sstar = [:]
+      items.each {i ->
+        if (getPu(i,stores,day,t*2,db)>db.content.findOne(store:warehouse._id,item:i._id,day:day).n) {
+          itemsk << i
+          sstar[i] = [sprojt(i,stores,t,day,db),sstatt(i,t,day,db)].max()
+          println "item:${i.name} sstar:${sstar[i]}"
+        }
+      }
+      def qdiv = itemsk.inject(0) {a,i -> a + (sstar[i]*i.ro*warehouse.ro*i.price*t)}
+      
+      def qm = (2*warehouse.k*365/qdiv)**0.5
+      def deliveryItems = []
+      itemsk.each {
+        deliveryItems << [item:it._id,n:(Integer)(sstar[it]*qm).round()]
+      }
+      println deliveryItems
+      
+      db.order << [to:warehouse._id,items:deliveryItems,day:day]
+    }
+  }
+  
+  def sprojt(i,stores,t,day,db){
+    return stores.inject(0) {a,s->a+sproj(i,s,day,t,db)}
+  }
+  
+  def sstatt(i,t,day,db){
+    return (day-t+1..day).inject(0) {a,b ->a+sstatw(i,b,db)}
+  }
+  
+  def getPu(i,stores,day,t,db){
+    def sstatp2t = (day-364..day-364+t-1).inject(0) {a,b ->a+sstatw(i,b,db)}
+    def sproj2t = sprojt(i,stores,t,day,db)
+    def sstat2t = sstatt(i,t,day,db)
+    def d = ((day-2*t+1..day).inject(0) {a,b ->a+(sstatw(i,b,db)-sstat2t/t)**2})**0.5
+    def R = Math.signum(sproj2t-sstat2t)*d
+    return i.nu*(alpha*sstatp2t + (1-alpha)*sproj2t + R)
   }
 
-  def getT(db,store) {
-    /*def deliveryDates = []
-    db.deliveries.find(store:store._id).sort(day:-1).limit(2).each{ deliveryDates<<it.day}
+  def getT(db) {
+    def deliveryDates = []
+    db.order.find().sort(day:-1).limit(2).each{ deliveryDates<<it.day}
     if (deliveryDates.size()>1){
-      return deliveryDates[1]-deliveryDates[0]
-    }*/
+      return deliveryDates[0]-deliveryDates[1]
+    }
     return 30
   }
 
