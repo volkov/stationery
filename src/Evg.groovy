@@ -44,8 +44,8 @@ class Evg {
     def warehouse = db.store.findOne(type:"warehouse")
     items.each{println it}
     
-    def t = getT(db)
     stores.each { s ->
+    def t = getT(db)
       println "----- store:${s.name} -----"
       def pu = [:]
       println "--- pu dump ---"
@@ -125,6 +125,7 @@ class Evg {
     }
     println "-------warehouse-------"
     def shouldOrder=false
+    def t = getAvgT(db)
     items.each {i -> 
       println "--- item ${i.name} ---"
       println sstatw(i,day,db)
@@ -174,7 +175,7 @@ class Evg {
     def sstat2t = sstatt(i,t,day,db)
     def d = ((day-2*t+1..day).inject(0) {a,b ->a+(sstatw(i,b,db)-sstat2t/t)**2})**0.5
     def R = Math.signum(sproj2t-sstat2t)*d
-    return i.nu*(alpha*sstatp2t + (1-alpha)*sproj2t + R)
+    return i.nu*1.1*(alpha*sstatp2t + (1-alpha)*sproj2t + R)
   }
 
   def getT(db) {
@@ -185,6 +186,20 @@ class Evg {
     }
     return 30
   }
+  def getAvgT(db) {
+    def prev = -30
+    def t = []
+    db.order.find().sort(day:-1).each{
+      t<<it.day-prev
+      prev = it.day
+    }
+    if (t.size()>0){
+      def s = (t.inject(0) {a,b -> a+b})
+      return (Integer)(s/t.size())
+    }
+    return 30
+  }
+
 
   def wrap(cursor){
     def result = []

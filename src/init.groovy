@@ -23,7 +23,7 @@ println demand
 dao.eachItemStore{ i,s->
   ((1-demand.size())..0).each{
     d = (Integer) (demand[-it]*i.demand).round()
-    dao.db.content<< [item:i._id,store:s._id,demand:d,n:d,day:it]
+    dao.db.content<< [item:i._id,store:s._id,demand:(Integer)(d*s.demand).round(),n:d,day:it]
   }
 }
 dao.eachItemWarehouse{ i,s->
